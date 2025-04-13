@@ -1,6 +1,8 @@
-﻿static double Num(string input)
+﻿using System.Net.Http.Headers;
+
+static double Num(string input)
 {
-    if(string.IsNullOrWhiteSpace(input))
+    if (string.IsNullOrWhiteSpace(input)) //input field must be filled
     {
         return 0D;
     }
@@ -13,21 +15,35 @@
 static string getInput()
 {
     Console.WriteLine("Enter a number and press enter: ");
-    return Console.ReadLine() ?? "";
+    string input = Console.ReadLine() ?? ""; //if null return empty
+        if (input.ToLower()=="q") 
+        {
+            return input = "quit";
+        }
+        else if (input.All(char.IsDigit)==false ^ input == "")//if not a digit, or input is empty
+        {
+            Console.WriteLine("Please enter a number or 'q' to quit");
+            return getInput();
+        }
+        else
+        {
+            return input;
+        }
 }
-// add a catch for if any character other than numbers and 'q' are entered before the choice.
 
 while(true)
 {
     Console.WriteLine("This is a simple calculator -- you will be asked for two numbers");
     Console.WriteLine("Press 'q' at anytime to Quit");
 
+    //inputs
     string input1 = getInput();
-    if (input1.ToLower()=="q") break;
-
+    if (input1 == "quit") break;
+    
     string input2 = getInput();
-    if (input2.ToLower()== "q") break;
-
+    if (input2 == "quit") break;
+  
+    //convert input to double
     double num = Num(input1);
     double num2 = Num(input2);
 
@@ -72,3 +88,6 @@ while(true)
     }
    
 }
+// Added test to see if a string/char other than 'q' was entered. 
+// if a char is entered the program continues until a num is accepted
+// added notes, cleaned up some code
