@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Headers;
-
-static double Num(string input)
+﻿static double Num(string input)
 {
     if (string.IsNullOrWhiteSpace(input)) //input field must be filled
     {
@@ -12,82 +10,111 @@ static double Num(string input)
     }
 }
 
-static string getInput()
+static string GetInput()
 {
-    Console.WriteLine("Enter a number and press enter: ");
-    string input = Console.ReadLine() ?? ""; //if null return empty
-        if (input.ToLower()=="q") 
-        {
-            return input = "quit";
-        }
-        else if (input.All(char.IsDigit)==false ^ input == "")//if not a digit, or input is empty
-        {
+    while (true)
+    {
+        Console.WriteLine("Enter a number and press enter: ");
+        string input = Console.ReadLine()?.Trim().ToLower() ?? ""; //if null return empty
+            if (input == "q")
+                return "quit";
+            
+            if (double.TryParse(input, out _)) //if not a digit  
+                return input;
+            
             Console.WriteLine("Please enter a number or 'q' to quit");
-            return getInput();
-        }
-        else
-        {
-            return input;
-        }
+    }
 }
 
-while(true)
+static bool ContinueCalculation()
 {
-    Console.WriteLine("This is a simple calculator -- you will be asked for two numbers");
-    Console.WriteLine("Press 'q' at anytime to Quit");
+    Console.WriteLine("Would you like to do another calculation with this result? Yes or No: ");
+    string Continue = Console.ReadLine()?.ToLower() ?? "";
+        if (Continue == "yes") 
+        {
+            return true;
+        }
 
-    //inputs
-    string input1 = getInput();
-    if (input1 == "quit") break;
-    
-    string input2 = getInput();
-    if (input2 == "quit") break;
-  
-    //convert input to double
-    double num = Num(input1);
-    double num2 = Num(input2);
+    return false;
+}
 
+static void DisplayMenu()
+{
     Console.WriteLine("Choose and option from the list");
     Console.WriteLine("\ta - addition");
     Console.WriteLine("\ts - subtract");
     Console.WriteLine("\tm - multiply");
     Console.WriteLine("\td - divide");
-    
-    string choice = Console.ReadLine()?.ToLower() ?? "";
-    if (choice == "q") break;
+}
 
-    switch(choice)
+static double Calculate(double num, double num2, string choice)
+{
+    switch(choice) 
     {
         case "a":
-            Console.WriteLine($"your result is {num + num2}");
-            break;
-
+            return  num + num2;
         case "s":
-            Console.WriteLine($"Your result is {num - num2}");
-            break;
-
+            return num - num2;
         case "m":
-            Console.WriteLine($"Your result is {num * num2}");
-            break;
-
+            return num * num2;
         case "d":
             if (num2 == 0)
             {
                 Console.WriteLine("Cannot divide by 0, Please enter a different number");
+                return double.NaN;
             }
-            else
-            {
-                Console.WriteLine($"Your result is {num / num2}");
-            }
-            break;
-          
+            return num / num2;
         default:
-            Console.WriteLine("Please enter a valid choice");
-            break;
-
+            Console.WriteLine("invalid choice");
+            return double.NaN;
     }
-   
+
 }
-// Added test to see if a string/char other than 'q' was entered. 
-// if a char is entered the program continues until a num is accepted
-// added notes, cleaned up some code
+
+Console.WriteLine("This is a simple calculator -- you will be asked for two numbers");
+Console.WriteLine("Press 'q' at anytime to Quit");
+
+  
+
+/*
+string input1 = GetInput();
+    if (input1 == "quit") return;
+string input2 = GetInput();
+    if (input2 == "quit") return;*/
+double num = Num(GetInput());
+double num2 = Num(GetInput());
+
+while(true)
+{
+    DisplayMenu();
+
+    string choice = Console.ReadLine()?.ToLower() ?? "";
+
+    if (choice == "q") break;
+
+    double result = Calculate(num, num2, choice);
+ 
+    if (!double.IsNaN(result))
+    {
+        Console.WriteLine($"Your result is {result}");
+    }
+
+    if (ContinueCalculation())
+    {
+        num = result;
+        num2 = Num(GetInput()); 
+    }
+    else
+    {
+        num = Num(GetInput());
+        num2 = Num(GetInput());
+    }
+    
+}
+// Add unit tests to core logic, such as Num() and the calculator itself
+// Allow for multiple calculations
+
+// "q" only quits on the choice section, not on the number inptus. returns string "quit" which breaks at Num()
+// inputs are not in while loop so i cant break out if q is entered
+
+
