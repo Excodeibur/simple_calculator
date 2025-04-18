@@ -76,13 +76,13 @@ Console.WriteLine("Press 'q' at anytime to Quit");
 
   
 
-/*
+
 string input1 = GetInput();
     if (input1 == "quit") return;
 string input2 = GetInput();
-    if (input2 == "quit") return;*/
-double num = Num(GetInput());
-double num2 = Num(GetInput());
+    if (input2 == "quit") return;
+double num = Num(input1);
+double num2 = Num(input2);
 
 while(true)
 {
@@ -102,12 +102,19 @@ while(true)
     if (ContinueCalculation())
     {
         num = result;
-        num2 = Num(GetInput()); 
+        string input = GetInput();
+        if (input == "quit") return;
+        num2 = Num(input); 
     }
     else
-    {
-        num = Num(GetInput());
-        num2 = Num(GetInput());
+    {   
+        input1 = GetInput();
+        if (input1 == "quit") return;
+        input2 = GetInput();
+        if (input2 == "quit") return;
+
+        num = Num(input1);
+        num2 = Num(input2);
     }
     
 }
