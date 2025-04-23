@@ -23,12 +23,12 @@ public class Calculator
                 }
             }
 
-            if(i == '(')
+            if (i == '(')
             {
                 operatorStack.Push(i);
             }
 
-            if(i == ')')
+            if (i == ')')
             {
                 while (operatorStack.Peek().ToString() != "(")
                 {
@@ -43,18 +43,21 @@ public class Calculator
                 HandleOperator(i.ToString(), operatorStack, outputQueue);
             }
         }
-         if (!string.IsNullOrEmpty(currentNumber))
+        
+        if (!string.IsNullOrEmpty(currentNumber))
         {
             outputQueue.Enqueue(currentNumber);
         }
+        
         while (operatorStack.Count > 0)
         {
             outputQueue.Enqueue(operatorStack.Pop().ToString());
         }
 
         return outputQueue;
-
     }
+
+    
     public static void HandleOperator(string currentOp, Stack operatorStack, Queue<string> outputQueue)
     {
         if (string.IsNullOrEmpty(currentOp))
@@ -82,6 +85,7 @@ public class Calculator
 
             return;
         }
+        
         while(operatorStack.Count > 0)
         {
             string topOp = operatorStack.Peek().ToString();
@@ -93,7 +97,7 @@ public class Calculator
             {
                 outputQueue.Enqueue(operatorStack.Pop().ToString());
             }
-
+            
             else
             {
                 break;
@@ -102,6 +106,7 @@ public class Calculator
         operatorStack.Push(currentOp);
     }
 
+    
     public static int GetPrecendence(string op)
     {
         switch(op)
@@ -134,15 +139,13 @@ public class Calculator
                 double a = numbers.Pop();
                 double b = numbers.Pop();
                 numbers.Push(b + a);
-            
             }
 
             else if (i == "-")
             {
                 double a = numbers.Pop();
                 double b = numbers.Pop();
-                numbers.Push(b - a);
-                
+                numbers.Push(b - a);   
             }
 
             else if (i == "*")
@@ -175,8 +178,8 @@ public class Calculator
         {
             Console.WriteLine("Invalid expression.");
         }
-       
     }
+    
 
     public static void Main()
     {
@@ -185,7 +188,5 @@ public class Calculator
         string expression = Console.ReadLine() ?? "";
         
         EvaluatePostfix(ToPostfix(expression));
-    }
-      
-        
+    }        
 }
